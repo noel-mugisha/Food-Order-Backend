@@ -1,27 +1,32 @@
-import {Request, Response, NextFunction} from 'express';
+import { Request, Response, NextFunction } from 'express';
 import { CreateVendorInput } from '../dto/Vendor.dto';
-import {VendorModel} from '../models/VendorModel';
+import { VendorModel } from '../models/VendorModel';
 
-// controller to create a vendor
-export const CreateVendor = async (req: Request, res: Response, next: NextFunction) => {
-    const {name, ownerName, foodType, pincode, address, phone, email, password} = <CreateVendorInput> req.body;
-    // saving the vendor to the database
+// Controller to create a vendor
+export const CreateVendor = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+        const { name, ownerName, foodType, pincode, address, phone, email, password } = req.body as CreateVendorInput;
 
-    const createVendor = await VendorModel.create({
-        name,
-        address,
-        pincode,
-        foodType,
-        email,
-        password,
-        salt: '',
-        ownerName,
-        phone,
-        rating: 0,
-        serviceAvailable: false,
-        coverImages: [],
-    });
+        // Creating the vendor
+        const createdVendor = await VendorModel.create({
+            name,
+            address,
+            pincode,
+            foodType,
+            email,
+            password,
+            salt: 'salt', // You should generate a proper salt and hash the password before saving it
+            ownerName,
+            phone,
+            rating: 0,
+            serviceAvailable: false,
+            coverImages: [],
+        });
 
+        res.status(201).json(createdVendor);
+    } catch (error) {
+        next(error);
+    }
 };
 
 // controller to get all vendors
