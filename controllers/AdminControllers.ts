@@ -8,17 +8,18 @@ export const CreateVendor = async (req: Request, res: Response, next: NextFuncti
     try {
         const { name, ownerName, foodType, pincode, address, phone, email, password } = req.body as CreateVendorInput;
 
-        // finding an existing vendor
+        // Find an existing vendor
         const existingVendor = await VendorModel.findOne({ email });
-        if (existingVendor !== null) {
+        if (existingVendor) {
             res.status(400).json({ message: 'Vendor already exists' });
+            return;
         }
 
-        // hashing the password
+        // Hash the password
         const salt = await GenerateSalt();
         const hashedPassword = await GenerateHashedPassword(password, salt);
 
-        // Creating the vendor
+        // Create the vendor
         const createdVendor = await VendorModel.create({
             name,
             address,
@@ -40,12 +41,37 @@ export const CreateVendor = async (req: Request, res: Response, next: NextFuncti
     }
 };
 
-// controller to get all vendors
-export const GetAllVendors = async (req: Request, res: Response, next: NextFunction) => {
+// Controller to get all vendors
+export const GetAllVendors = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+        const allVendors = await VendorModel.find();
 
+        if (allVendors.length === 0) {
+            res.status(404).json({ message: 'No vendors found' });
+            return;
+        }
+
+        res.status(200).json(allVendors);
+    } catch (error) {
+        next(error);
+    }
 };
 
-// controller to get a specific  vendor
-export const GetVendorById = async (req: Request, res: Response, next: NextFunction) => {
+// Controller to get a specific vendor
+export const GetVendorById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+        const { id } = req.params;
 
+        // Find the vendor by ID
+        const vendor = await VendorModel.findById(id);
+
+        if (!vendor) {
+            res.status(404).json({ message: 'Vendor not found' });
+            return;
+        }
+
+        res.status(200).json(vendor);
+    } catch (error) {
+        next(error);
+    }
 };

@@ -11,7 +11,7 @@ router.post('/', CreateVendor);
 router.get('/', GetAllVendors);
 
 // route to get a vendor by Id
-router.get('/:id', GetVendorById);
+
 
 
 export default router;
