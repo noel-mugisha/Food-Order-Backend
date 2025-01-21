@@ -1,16 +1,11 @@
 import express from 'express';
-import { CreateVendor, GetAllVendors, GetVendorById } from '../controllers/AdminControllers';
 
 // initiating the router
 const router = express.Router();
 
-// route to create a vendor
-router.post('/', CreateVendor);
+// route to login a vendor
+router.post('/login', );
 
-// router to get all vendors
-router.get('/', GetAllVendors);
-
-// route to get a vendor by Id
 
 
 

@@ -23,7 +23,7 @@ const VendorSchema = new Schema ({
     pincode: {type: String, required: true},
     address: {type: String},
     phone: {type: String, required: true},
-    email: {type: String, required: true},
+    email: {type: String, required: true, unique: true},
     password: {type: String, required: true},
     salt: {type: String, required: true},
     serviceAvailable: {type: Boolean},
