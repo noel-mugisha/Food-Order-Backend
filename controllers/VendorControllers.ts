@@ -24,3 +24,7 @@ export const VendorLogin = async (req: Request, res: Response, next: NextFunctio
     }
     res.status(200).json(existingVendor);
 }
+
+export const GetVandorProfile = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    
+}

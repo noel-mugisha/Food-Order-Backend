@@ -1,5 +1,5 @@
 import express from 'express';
-import { VendorLogin } from '../controllers/VendorControllers';
+import { GetVandorProfile, VendorLogin } from '../controllers/VendorControllers';
 
 // initiating the router
 const router = express.Router();
@@ -7,11 +7,8 @@ const router = express.Router();
 // route to login a vendor
 router.post('/login', VendorLogin);
 
-router.get('/profile');
+router.get('/profile', GetVandorProfile);
 router.patch('/profile');
 router.patch('/service');
 
-
-
-
-export default router;
+export default router; 
