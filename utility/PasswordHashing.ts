@@ -1,5 +1,7 @@
 import bcrypt from 'bcrypt';
-import { VandorPayload } from '../dto/Vendor.dto';
+import { VendorPayload } from '../dto/Vendor.dto';
+import jwt from 'jsonwebtoken';
+import { APP_SECRET } from '../config/Config';
 
 // function to generate salt
 export const GenerateSalt = async(): Promise<string> => {
@@ -14,6 +16,6 @@ export const ValidatePassword = async (enteredPassword: string, savedPassword: s
     return await bcrypt.compare(enteredPassword, savedPassword);
 }
 
-export const GenerateSignature = async (payload: VandorPayload): Promise<string> => {
-    
+export const GenerateSignature = (payload: VendorPayload) => {
+    return jwt.sign(payload, APP_SECRET, { expiresIn: '1d'});
 }

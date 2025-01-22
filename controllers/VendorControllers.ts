@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { VendorLoginInputs } from "../dto/Vendor.dto";
 import { VendorModel } from "../models/VendorModel";
-import { ValidatePassword } from "../utility/PasswordHashing";
+import { GenerateSignature, ValidatePassword } from "../utility/PasswordHashing";
 
 // controller to login a vendor
 export const VendorLogin = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -22,7 +22,15 @@ export const VendorLogin = async (req: Request, res: Response, next: NextFunctio
         res.status(400).json({message: "Invalid password"});
         return;
     }
-    res.status(200).json(existingVendor);
+
+    const signature = GenerateSignature({
+        _id: existingVendor._id as string,
+        email: existingVendor.email,
+        name: existingVendor.name,
+        foodTypes: existingVendor.foodType
+    });
+
+    res.status(200).json(signature);
 }
 
 export const GetVandorProfile = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
