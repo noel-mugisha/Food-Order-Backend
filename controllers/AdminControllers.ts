@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { CreateVendorInput } from '../dto/Vendor.dto';
 import { VendorModel } from '../models/VendorModel';
-import { GenerateHashedPassword, GenerateSalt } from '../utility/PasswordHashing';
+import { GenerateHashedPassword, GenerateSalt } from '../utility/AppUtils';
 
 // Controller to create a vendor
 export const CreateVendor = async (req: Request, res: Response, next: NextFunction): Promise<void> => {

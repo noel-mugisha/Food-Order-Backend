@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { VendorLoginInputs } from "../dto/Vendor.dto";
 import { VendorModel } from "../models/VendorModel";
-import { GenerateSignature, ValidatePassword } from "../utility/PasswordHashing";
+import { GenerateSignature, ValidatePassword } from "../utility/AppUtils";
 
 // controller to login a vendor
 export const VendorLogin = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
