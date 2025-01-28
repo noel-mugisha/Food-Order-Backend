@@ -10,6 +10,7 @@ declare global {
     }
 }
 
+// middleware to authenticate the user
 export const Authenticate = (req: Request, res: Response, next: NextFunction): void => {
     const validate = VerifySignature(req);
 

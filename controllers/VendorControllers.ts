@@ -33,6 +33,25 @@ export const VendorLogin = async (req: Request, res: Response, next: NextFunctio
     res.status(200).json(signature);
 }
 
-export const GetVandorProfile = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    
-}
+export const GetVendorProfile = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    const user = (req as any).user;
+
+    if (!user) {
+        res.status(404).json({ message: "Vendor information not found..." });
+        return; // Exit after sending the response
+    }
+
+    try {
+        const existingVendor = await VendorModel.findById(user._id);
+
+        if (!existingVendor) {
+            res.status(404).json({ message: "Vendor not found in the database." });
+            return; // Exit if vendor does not exist
+        }
+
+        res.status(200).json(existingVendor); // Return the found vendor
+    } catch (error) {
+        console.error('Error fetching vendor profile:', error);
+        res.status(500).json({ message: "An error occurred while fetching vendor profile." });
+    }
+};
