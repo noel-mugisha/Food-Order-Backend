@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { VendorLoginInputs } from "../dto/Vendor.dto";
+import { EditVendorInputs, VendorLoginInputs } from "../dto/Vendor.dto";
 import { VendorModel } from "../models/VendorModel";
 import { GenerateSignature, ValidatePassword } from "../utility/AppUtils";
 
@@ -34,15 +34,15 @@ export const VendorLogin = async (req: Request, res: Response, next: NextFunctio
 }
 
 export const GetVendorProfile = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    const user = (req as any).user;
+    const vendor = (req as any).user;
 
-    if (!user) {
+    if (!vendor) {
         res.status(404).json({ message: "Vendor information not found..." });
         return; // Exit after sending the response
     }
 
     try {
-        const existingVendor = await VendorModel.findById(user._id);
+        const existingVendor = await VendorModel.findById(vendor._id);
 
         if (!existingVendor) {
             res.status(404).json({ message: "Vendor not found in the database." });
@@ -55,3 +55,26 @@ export const GetVendorProfile = async (req: Request, res: Response, next: NextFu
         res.status(500).json({ message: "An error occurred while fetching vendor profile." });
     }
 };
+
+export const UpdateVendorProfile = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    const { name, address, phone, foodTypes } = <EditVendorInputs>req.body;
+    const vendor = (req as any).user;
+
+    // retreive the existing user in the database
+    const existingVendor = await VendorModel.findById(vendor._id);
+
+    if (!existingVendor) {
+        res.status(404).json({message: "Vendor not found in the database."});
+        return;
+    }
+
+    existingVendor.name = name;
+    existingVendor.address = address;
+    existingVendor.phone = phone;
+    existingVendor.foodType = foodTypes;
+
+    const updatedVendor = await existingVendor.save();
+
+    res.status(200).json({ message: "Vendor data updated sussceffuly..", vendor: existingVendor});
+    return;
+}

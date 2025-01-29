@@ -15,9 +15,13 @@ export const Authenticate = (req: Request, res: Response, next: NextFunction): v
     const validate = VerifySignature(req);
 
     if (!validate) {
-        res.status(401).json({ message: 'User not Authorized..'})
+        res.status(401).json({ message: 'User not Authorized..'});
         return;
     }
 
     next();
 }
+
+
+
+
