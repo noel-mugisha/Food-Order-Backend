@@ -78,3 +78,39 @@ export const UpdateVendorProfile = async (req: Request, res: Response, next: Nex
     res.status(200).json({ message: "Vendor data updated sussceffuly..", vendor: existingVendor});
     return;
 }
+
+export const UpdateVendorService = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+        if (!req.user) {
+            res.status(401).json({ message: "Unauthorized: Vendor information not found." });
+            return;
+        }
+
+        const existingVendor = await VendorModel.findById(req.user._id);
+        if (!existingVendor) {
+            res.status(404).json({ message: "Vendor not found in the database." });
+            return;
+        }
+
+        // Toggle service availability
+        existingVendor.serviceAvailable = !existingVendor.serviceAvailable;
+        const updatedVendor = await existingVendor.save();
+
+        res.status(200).json({ message: "Vendor service updated successfully.", vendor: updatedVendor });
+    } catch (error) {
+        console.error("Error updating vendor service:", error);
+        res.status(500).json({ message: "Internal server error." });
+    }
+};
+
+
+
+
+export const AddFood = async(req: Request, res: Response, next: NextFunction): Promise<void> => {
+    const user = req.user as any;
+    
+}
+
+export const GetFoods = async(req: Request, res: Response, next: NextFunction): Promise<void> => {
+    
+}
