@@ -150,5 +150,23 @@ export const AddFoodItem = async (req: Request, res: Response, next: NextFunctio
 };
 
 export const GetFoods = async(req: Request, res: Response, next: NextFunction): Promise<void> => {
-    
+    const vendor = req.user;
+
+    // Check if the vendor is logged in
+    if (!vendor) {
+        res.status(401).json({ message: "Unauthorized: Vendor not logged in" });
+        return;
+    }
+
+    try {
+        // Fetch foods associated with the vendor
+        const foods = await FoodModel.find({ vendorId: vendor._id });
+
+        // Send the response with the fetched foods
+        res.status(200).json({ foods });
+    } catch (error) {
+        // Handle any errors that occur during the database query
+        console.error("Error fetching foods:", error);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
 }
