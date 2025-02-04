@@ -6,7 +6,7 @@ import { GenerateHashedPassword, GenerateSalt } from '../utility/AppUtils';
 // Controller to create a vendor
 export const CreateVendor = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const { name, ownerName, foodType, pincode, address, phone, email, password } = req.body as CreateVendorInput;
+        const { name, ownerName, foodType, pincode, address, phone, email, password, serviceAvailable, rating } = req.body as CreateVendorInput;
 
         // Find an existing vendor
         const existingVendor = await VendorModel.findOne({ email });
@@ -30,8 +30,8 @@ export const CreateVendor = async (req: Request, res: Response, next: NextFuncti
             salt,
             ownerName,
             phone,
-            rating: 0,
-            serviceAvailable: false,
+            rating,
+            serviceAvailable,
             coverImages: [],
         });
 

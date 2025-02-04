@@ -36,6 +36,7 @@ const FoodSchema: Schema<FoodDoc> = new Schema<FoodDoc>(
   }
 );
 
-const FoodModel = mongoose.model<FoodDoc>('Foods', FoodSchema);
+const FoodModel = mongoose.model<FoodDoc>('Food', FoodSchema);
 
 export { FoodModel };
+
