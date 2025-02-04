@@ -1,5 +1,5 @@
 import express from 'express';
-import { GetVendorProfile, UpdateVendorProfile, UpdateVendorService, VendorLogin } from '../controllers/VendorControllers';
+import { AddFoodItem, GetVendorProfile, UpdateVendorProfile, UpdateVendorService, VendorLogin } from '../controllers/VendorControllers';
 import { Authenticate } from '../middlewares/CommonAuths';
 
 // initiating the router
@@ -18,7 +18,7 @@ router.get('/profile',GetVendorProfile);
 router.patch('/profile',UpdateVendorProfile);
 router.patch('/service', UpdateVendorService);
 // route to add food items
-router.post('/food');
+router.post('/food', AddFoodItem);
 // route to get all food items
 router.get('/foods')
 

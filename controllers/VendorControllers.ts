@@ -2,6 +2,9 @@ import { Request, Response, NextFunction } from "express";
 import { EditVendorInputs, VendorLoginInputs } from "../dto/Vendor.dto";
 import { VendorModel } from "../models/VendorModel";
 import { GenerateSignature, ValidatePassword } from "../utility/AppUtils";
+import { CreateFoodInputs } from "../dto/Food.dto";
+import { FoodModel } from "../models/FoodModel";
+import { AuthPayload } from "../dto/Auth.dto";
 
 // controller to login a vendor
 export const VendorLogin = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -104,12 +107,47 @@ export const UpdateVendorService = async (req: Request, res: Response, next: Nex
 };
 
 
+export const AddFoodItem = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+        // Ensure that the vendor is attached to the request (from authentication middleware)
+        const vendor = req.user as AuthPayload | undefined;
+        if (!vendor) {
+            res.status(401).json({ message: "Unauthorized: Vendor not logged in." });
+            return;
+        }
 
+        const { name, description, category, foodType, readyTime, price } = req.body as CreateFoodInputs;
 
-export const AddFood = async(req: Request, res: Response, next: NextFunction): Promise<void> => {
-    const user = req.user as any;
-    
-}
+        // Retrieve the existing vendor from the database
+        const existingVendor = await VendorModel.findById(vendor._id);
+        if (!existingVendor) {
+            res.status(404).json({ message: "Vendor not found in the database." });
+            return;
+        }
+
+        // Create a new food document
+        const createdFood = await FoodModel.create({
+            vendorId: vendor._id,
+            name,
+            description,
+            category,
+            foodType,
+            images: ['mock.png'],  // Placeholder image, replace as needed
+            readyTime,
+            price,
+            rating: 0
+        });
+
+        // Add the created food to the vendor's foods array and save the vendor
+        existingVendor.foods.push(createdFood);
+        await existingVendor.save();
+
+        // Respond with the newly created food
+        res.status(201).json({ message: "Food added successfully", food: createdFood });
+    } catch (error) {
+        next(error);
+    }
+};
 
 export const GetFoods = async(req: Request, res: Response, next: NextFunction): Promise<void> => {
     
