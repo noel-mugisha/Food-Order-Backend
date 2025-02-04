@@ -124,7 +124,7 @@ export const AddFoodItem = async (req: Request, res: Response, next: NextFunctio
             res.status(404).json({ message: "Vendor not found in the database." });
             return;
         }
-
+        
         // Create a new food document
         const createdFood = await FoodModel.create({
             vendorId: vendor._id,
