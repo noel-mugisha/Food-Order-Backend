@@ -2,11 +2,11 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
-import path from 'path';
 
 import AdminRoutes from './routes/AdminRoutes';
 import VendorRoutes from './routes/VendorRoutes';
 import { MONGODB_URI } from './config/Config';
+import ShoppingRoutes from './routes/ShoppingRoutes';
 
 // initializing the app
 const app = express();
@@ -23,6 +23,7 @@ mongoose.connect(MONGODB_URI).then(() => {
 // route middlewares
 app.use('/admin', AdminRoutes);
 app.use('/vendor', VendorRoutes);
+app.use(ShoppingRoutes);
 
 // app is listening on port 8000
 app.listen(8000, () => {
